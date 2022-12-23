@@ -1,0 +1,16 @@
+const express = require("express")
+const app = express()
+const cors = require("cors")
+const db = require("./config/db")
+const { log } = require("./middleware/logger")
+require("dotenv").config({ path: "./.env" })
+db()
+app.use(express.json())
+app.use(cors())
+app.use(express.static("public"))
+app.use("/test", log, (req, res) => {
+    res.json({ message: "/route" })
+})
+app.use("/user", require("./routes/userRoute"))
+const PORT = process.env.PORT || 5000
+app.listen(PORT, console.log(`Server Running http://localhost:${PORT}`)) 
